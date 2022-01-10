@@ -8,13 +8,50 @@ const Person = ({ person }) => {
   )
 }
 
+const Filter = ({filterVal, handleFilter}) => {
+  return (
+    <div>
+      filter shwon with <input value={filterVal} onChange={handleFilter} />
+  </div>
+  )
+}
+
+const Form = ({ handleNameChange, handleNumberChange, addPerson, newName, newNumber}) => {
+  return (
+    <div>
+      <form onSubmit={addPerson}>
+        <div>
+          name: <input 
+                  value={newName}
+                  onChange={handleNameChange} 
+                />
+        </div>
+        <div>
+          number: <input
+                    value = {newNumber}
+                    onChange = {handleNumberChange}
+                  />
+        </div>
+        <div>
+          <button type='submit'>add</button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+const Entries = ({filteredEntries}) => {
+  return(
+    <div>
+      {filteredEntries.map(person =>
+        <Person key={person.id} person={person} />
+      )}
+    </div>
+  )
+}
+
 const App = () => {
-  const [persons, setPersons] = useState([
-    {name: 'Barry Still', number: '21-99986-6863', id: 1},
-    {name: 'Kimberly Still', number: '21-99884-3880', id: 2},
-    {name: 'Larry Still', number: '+1 417-359-4117', id: 3},
-    {name: 'Paul Thomas', number: '+1 618-792-5529', id: 4},
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterVal, setNewFilterVal] = useState('')
@@ -24,7 +61,7 @@ const App = () => {
   const handleNameChange = (event) => setNewName(event.target.value)
   const handleFilter = (event) => {
     setNewFilterVal(event.target.value)
-    setFilteredEntries((filterVal === '') 
+    setFilteredEntries((filterVal === '' || filterVal.length < 2) 
       ? persons 
       : persons.filter(person => person.name.toLowerCase().includes(filterVal.toLowerCase()))
     )
@@ -55,31 +92,17 @@ const App = () => {
   return(
     <div>
       <h2>Phonebook</h2>
-        <div>
-          filter shwon with <input value={filterVal} onChange={handleFilter} />
-        </div>
+      <Filter filterVal={filterVal} handleFilter={handleFilter} />
       <h3>Add a new entry</h3>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input 
-                  value={newName}
-                  onChange={handleNameChange} 
-                />
-        </div>
-        <div>
-          number: <input
-                    value = {newNumber}
-                    onChange = {handleNumberChange}
-                  />
-        </div>
-        <div>
-          <button type='submit'>add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-        {filteredEntries.map(person =>
-          <Person key={person.id} person={person} />
-        )}
+      <Form 
+        handleNameChange={handleNameChange} 
+        handleNumberChange={handleNumberChange} 
+        addPerson={addPerson}
+        newName={newName}
+        newNumber={newNumber}
+      />
+      <h3>Numbers</h3>
+      <Entries filteredEntries={filteredEntries} />
     </div>
   )
 }
