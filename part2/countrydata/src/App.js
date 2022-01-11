@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const Country = ({country}) => {
+const Country = ({country, handleShow}) => {
   return(
     <div>
-      {country.name.common}
+      {`${country.name.common} `}
+      <button onClick={handleShow}>Show</button>
     </div>
   )
 }
@@ -30,7 +31,8 @@ const CountryDetail = ({country}) => {
   )
 }
 
-const Display = ({countries, filter}) => {
+const Display = ({countries, filter, handleShow}) => {
+  //console.log(filter)
   const filteredList = countries.filter(country => 
     country.name.common.toLowerCase().includes(filter.toLowerCase())
   )
@@ -47,7 +49,7 @@ const Display = ({countries, filter}) => {
   return(
       <div>
         {filteredList.map(country =>
-          <Country key={country.name.common} country={country} />  
+          <Country key={country.name.common} country={country} handleShow={handleShow} />  
         )}
       </div>
   ) 
@@ -61,6 +63,10 @@ function App() {
     setFilter(event.target.value)
   }
   
+  const handleShow = (event) => {
+    setFilter(event.target.parentElement.firstChild.data.trim())
+  }
+
   useEffect(() => {
     axios
       .get(`https://restcountries.com/v3.1/all`)
@@ -73,7 +79,7 @@ function App() {
   return (
     <div>
       find countries <input value={filter} onChange={handleFilter} />
-      <Display countries={countries} filter={filter} />
+      <Display countries={countries} filter={filter} handleShow={handleShow} />
     </div>
   )
 }
