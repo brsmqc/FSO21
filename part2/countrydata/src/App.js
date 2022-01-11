@@ -10,7 +10,7 @@ const Country = ({country}) => {
 }
 
 const CountryDetail = ({country}) => {
-  console.log(country)
+  //console.log(country)
   return(
     <div>
       <h1>{country.name.common}</h1>
