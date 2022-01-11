@@ -10,10 +10,16 @@ const Country = ({country}) => {
 }
 
 const Display = ({countries, filter}) => {
-  console.log(countries)
+  const filteredList = countries.filter(country => 
+    country.name.common.toLowerCase().includes(filter.toLowerCase())
+  )
+
+  if (filter === "") return(<div>Start typing to find a country.</div>)
+  if (filteredList.length > 10) return (<div>Too many matches, specify another filter.</div>)
+
   return(
       <div>
-        {countries.map(country =>
+        {filteredList.map(country =>
           <Country key={country.name.common} country={country} />  
         )}
       </div>
