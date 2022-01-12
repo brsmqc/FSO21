@@ -99,6 +99,14 @@ const App = () => {
           setMessage(null)
         }, 5000)
       })
+      .catch(error => {
+        setMessage(`${person.name} has already been removed from the server`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+        setPeople(people.filter(entry => entry.id !== person.id))
+        setFilteredEntries(filteredEntries.filter(entry => entry.id !== person.id))
+      })
     }
   }
 
