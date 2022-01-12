@@ -51,7 +51,17 @@ const App = () => {
     const allNames = people.map(person => person.name)
 
     if (allNames.includes(newName)) {
-      alert(`${newName} is already added to the phonebook`)
+      const confirmed = window.confirm(`${newName} is already added to the phonebook. Replace the entry that already exists?`)
+      if (confirmed) {
+        const person = people.find(p => p.name === newName)
+        const updatedPerson = {...person, number: newNumber}
+        phoneServices
+          .update(person.id, updatedPerson)
+          .then(returnedEntry => {
+            setPeople(people.map(entry => entry.id !== person.id ? entry : returnedEntry))
+            setFilteredEntries(filteredEntries.map(entry => entry.id !== person.id ? entry : returnedEntry))
+          })
+      }
     } else {
       phoneServices
         .create(personObject)
@@ -72,7 +82,6 @@ const App = () => {
     phoneServices
       .remove(person)
       .then((response) => {
-        console.log(response)
         setPeople(people.filter(entry => entry.id !== person.id))
         setFilteredEntries(filteredEntries.filter(entry => entry.id !== person.id))
       })
