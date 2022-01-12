@@ -66,16 +66,17 @@ const App = () => {
   }
   
   const removePerson = (person) => {
+    const confirmed = window.confirm(`Delete ${person.name} from the phonebook?`)
+
+    if (confirmed) {
     phoneServices
       .remove(person)
       .then((response) => {
         console.log(response)
-        if (response !== undefined) {
-          setPeople(people.filter(entry => entry.id !== person.id))
-          setFilteredEntries(filteredEntries.filter(entry => entry.id !== person.id))
-        }
+        setPeople(people.filter(entry => entry.id !== person.id))
+        setFilteredEntries(filteredEntries.filter(entry => entry.id !== person.id))
       })
-      .catch(error => console.log(error))
+    }
   }
 
   return(

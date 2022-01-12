@@ -13,19 +13,9 @@ const create = newObject => {
 }
 
 const remove = (person) => {
-    const confirmed = window.confirm(`Delete ${person.name} from the phonebook?`)
-
-    if (confirmed) {
-        const request = axios.delete(`${baseUrl}/${person.id}`)
-        console.log(`${person.id} was deleted from the phonebook`)
-        return request.then(response => response.data)
-    }
-
-    //If the user clicks cancel, I'm not 100% sure what to do. 
-    //The error thrown below doesn't really get picked up by .catch() in App.js.
-    //It keeps talling me there's an uncaught error.
-    throw new Error('User clicked cancel')
-
+  const request = axios.delete(`${baseUrl}/${person.id}`)
+  console.log(`${person.id} was deleted from the phonebook`)
+  return request.then(response => response.data)
 }
 
 export default { getAll, create, remove }
