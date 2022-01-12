@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import phoneServices from './services/phonebook'
 import Form from './components/Form'
 import Entries from './components/Entries'
+import Notification from './components/Notification'
 
 const Filter = ({filterVal, handleFilter}) => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filterVal, setNewFilterVal] = useState('')
   const [filteredEntries, setFilteredEntries] = useState(people)
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     phoneServices
@@ -60,6 +62,10 @@ const App = () => {
           .then(returnedEntry => {
             setPeople(people.map(entry => entry.id !== person.id ? entry : returnedEntry))
             setFilteredEntries(filteredEntries.map(entry => entry.id !== person.id ? entry : returnedEntry))
+            setMessage(`Changed ${newName}'s number to ${newNumber}`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
           })
       }
     } else {
@@ -68,6 +74,10 @@ const App = () => {
         .then(returnedEntry => {
           setPeople(people.concat(returnedEntry))
           setFilteredEntries(filteredEntries.concat(returnedEntry))
+          setMessage(`Added ${newName}`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         })
     }
 
@@ -84,6 +94,10 @@ const App = () => {
       .then((response) => {
         setPeople(people.filter(entry => entry.id !== person.id))
         setFilteredEntries(filteredEntries.filter(entry => entry.id !== person.id))
+        setMessage(`Removed ${person.name}`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       })
     }
   }
@@ -91,6 +105,7 @@ const App = () => {
   return(
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter filterVal={filterVal} handleFilter={handleFilter} />
       <h3>Add a new entry</h3>
       <Form 
