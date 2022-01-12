@@ -12,4 +12,18 @@ const create = newObject => {
     return request.then(response => response.data)
 }
 
-export default { getAll, create }
+const remove = (person) => {
+    const controller = new AbortController()
+    const confirmed = window.confirm(`Delete ${person.name} from the phonebook?`)
+
+    if (confirmed) {
+        const request = axios.delete(`${baseUrl}/${person.id}`)
+        console.log(`${person.id} was deleted from the phonebook`)
+        return request.then(response => response.data)
+    }
+    
+    throw 'User clicked cancel'
+
+}
+
+export default { getAll, create, remove }

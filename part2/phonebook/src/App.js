@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import phoneServices from './services/phonebook'
 import Form from './components/Form'
 import Entries from './components/Entries'
@@ -28,6 +27,7 @@ const App = () => {
       })
   }, [])
   
+  //Event Handlers
   const handleNumberChange = (event) => setNewNumber(event.target.value)
   const handleNameChange = (event) => setNewName(event.target.value)
   const handleFilter = (event) => {
@@ -40,6 +40,7 @@ const App = () => {
     )
   }
 
+  //Main Functions
   const addPerson = (event) => {
     event.preventDefault()
     const personObject = {
@@ -56,6 +57,7 @@ const App = () => {
         .create(personObject)
         .then(returnedEntry => {
           setPeople(people.concat(returnedEntry))
+          setFilteredEntries(filteredEntries.concat(returnedEntry))
         })
     }
 
@@ -63,6 +65,19 @@ const App = () => {
     setNewNumber('')
   }
   
+  const removePerson = (person) => {
+    phoneServices
+      .remove(person)
+      .then((response) => {
+        console.log(response)
+        if (response !== undefined) {
+          setPeople(people.filter(entry => entry.id !== person.id))
+          setFilteredEntries(filteredEntries.filter(entry => entry.id !== person.id))
+        }
+      })
+      .catch(error => console.log(error))
+  }
+
   return(
     <div>
       <h2>Phonebook</h2>
@@ -76,7 +91,10 @@ const App = () => {
         newNumber={newNumber}
       />
       <h3>Numbers</h3>
-      <Entries filteredEntries={filteredEntries} />
+      <Entries 
+        filteredEntries={filteredEntries}
+        removePerson={removePerson}
+      />
     </div>
   )
 }
