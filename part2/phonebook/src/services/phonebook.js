@@ -13,7 +13,6 @@ const create = newObject => {
 }
 
 const remove = (person) => {
-    const controller = new AbortController()
     const confirmed = window.confirm(`Delete ${person.name} from the phonebook?`)
 
     if (confirmed) {
@@ -21,8 +20,11 @@ const remove = (person) => {
         console.log(`${person.id} was deleted from the phonebook`)
         return request.then(response => response.data)
     }
-    
-    throw 'User clicked cancel'
+
+    //If the user clicks cancel, I'm not 100% sure what to do. 
+    //The error thrown below doesn't really get picked up by .catch() in App.js.
+    //It keeps talling me there's an uncaught error.
+    throw new Error('User clicked cancel')
 
 }
 
