@@ -24,6 +24,7 @@ const App = () => {
       .getAll()
       .then(initialEntries => {
         setPeople(initialEntries)
+        setFilteredEntries(initialEntries)
       })
   }, [])
   
